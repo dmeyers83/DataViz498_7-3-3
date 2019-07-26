@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style> /* set the CSS */
+
+.axis { font: 14px sans-serif; }
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1px;
+}
+
+.overlay {
+    fill: none;
+    pointer-events: all;
+}
+
+.focus circle {
+    fill: steelblue;
+}
+
+.focus text {
+    font-size: 14px;
+}
+
+.tooltip2 {
+    fill: white;
+    stroke: #000;
+}
+
+.tooltip-date, .tooltip-likes {
+    font-weight: bold;
+}
+
+
+</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<body onload='init()'>
+<div class="container"><br><br>
+    <h3>Doug Meyers, Data Visualization Assignment, 498, Assignment 7-3-3  </h3>
+    <h5>Description:  How CME Group (the world’s largest futures exchange), created value for their shareholders through M&A over time.</h5>
+    <br>
+    <div class="btn-group btn-group-lg border-primary" role="group" aria-label="...">
+        <button type="button " onclick="addData('8/31/2008',1)" class="btn btn-secondary border-white" autofocus>1. Early 2000s</button>
+        <button type="button " onclick="addData('7/1/2016',2)" class="btn btn-secondary border-white">2. Great Recession</button>
+        <button type="button" onclick="addData('7/15/2019',3)" class="btn btn-secondary border-white">3. Economic Recovery</button>
+    </div>
+    <Br><br>
+    <h5 id="overviewText"></h5><br>
+    <div id="chart" ></div>
+</div>
+
+
+<!-- load the d3.js library -->
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script>
+
+    //used https://bl.ocks.org/d3noob/0e276dc70bb9184727ee47d6dd06e915
+
+
+     function init() {
+
+        addData();
+    }
+
+    function addData(updatedRange ='8/31/2008', group =1) {
+
+         //clear contents
+        document.getElementById('chart').innerHTML = "";
+
+        const type = d3.annotationCalloutElbow;
+        console.log(group)
+
+        if (group == 1){
+            annotationsGroup = [{
+                note: {
+                    label: "Chicago Mercantile exchange goes public, demutualizing from a membership based ownership structure.",
+                    title: "IPO"
+                },
+                color: 'black',
+                x: 50, y: 290, dy: -150, dx: 50
+            },
+                {
+                    note: {
+                        label: "Merger of the 2 largest futures and dervitiavtes exchanges (Chicago Mercantile Exchange and the Chicago Board of Trade)",
+                        title: "CBOT Merger"
+                    },
+                    color: 'black',
+                    x: 300, y: 150, dy: -30, dx: 30
+
+                },
+                {
+                    note: {
+                        label: "CME purchases NYMEX for 8.9 billion",
+                        title: "NYMEX Acquisition"
+                    },
+                    color: 'black',
+                    x: 350, y: 200, dy: 25, dx: 30
+
+                }];
+            console.log('debug')
+            document.getElementById('overviewText').innerHTML = "In 2002 the Chicago Mercantile Exchange (CME), one of the largest futures and options exchanges, demutualized and went from a privately-owned company to public.   CME was actively investing in electronic trading, and their strategy was to consolidate the fragmented manual open outcry exchanges onto a single technology platform and distribution channel to achieve economies of scale.  In the 2000s, CME acquired CBOT and NYMEX, the leading agricultural, financial and energy future exchanges in the United States.  In that period, the stock reached a high of $138 from the IPO price of less $10 (after stock split).";
+        } //first click
+        else if(group == 2){
+            annotationsGroup = [{
+                note: {
+                    label: "Subprime Mortgage Crisis / Collapse of Lehman",
+                    title: "2008 Financial Crisis"
+                },
+                color: 'red',
+                x: 360, y: 200, dy: -25, dx: 50
+            },
+            {
+                    note: {
+                        label: "CME purchases Kansas City Board of Trade for $126M",
+                        title: "KCBT Acquisition "
+                    },
+                    color: 'black',
+                    x: 580, y: 225, dy: -100, dx: 50
+                },
+            {
+                note: {
+                    label: " Unemployment rate hits pre-recession level of 4.7% ",
+                    title: "Economic Recovery"
+                },
+                color: 'green',
+                x: 770, y: 176, dy: 50, dx: 50
+            }];
+            document.getElementById('overviewText').innerHTML = "Growth slowed down from 2008 to 2016 during the financial crisis.  CME made a small acquisition, which was the Kansas City Board of Trade, known for their specific wheat features.";
+
+        }//second click
+
+        else if(group == 3){
+            annotationsGroup = [{
+                note: {
+                    label: "CME Group purchases NEX Group for $5.5B",
+                    title: "NEX Acquisition"
+                },
+                color: 'black',
+                x: 900, y: 50, dy: 150, dx: -25
+            },{
+                note: {
+                    label: "In 2016, the 2 largest exchanges almost merged, but the deal fell apart.",
+                    title: "Potential ICE / CME Merger"
+                },
+                color: 'black',
+                x: 800, y: 140, dy: -50, dx: -25
+            }];
+
+            document.getElementById('overviewText').innerHTML = "After the economic recovery, CME was in talks to merge with ICE, the second largest futures and option exchange, however that deal didn’t happen.  CME did purchase one of the largest fixed income and FX cash markets in 2018 and the stock value is now over $200.";
+        }//third click
+
+
+
+
+
+
+
+        const annotations = annotationsGroup;
+
+
+
+
+
+        var margin = {top: 20, right: 20, bottom: 100, left: 50},
+            width = 960 - margin.left - margin.right,
+            height = 400 - margin.top - margin.bottom;
+
+        var formatValue = d3.format(","),
+            dateFormatter = d3.timeFormat("%m/%d/%y");
+
+        // parse the date / time
+        // var parseTime = d3.timeParse("%d-%b-%y");
+        var parseTime = d3.timeParse("%Y-%m-%d");
+        const timeFormat = d3.timeFormat("%Y-%m-%d");
+
+        // set the ranges
+        var x = d3.scaleTime().range([0, width]); //.domain([new Date('12/1/2002'), new Date('1/1/2005') ]);
+        var y = d3.scaleLinear().range([height, 0]);
+
+
+        // Define the div for the tooltip
+        var div = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        //date where the graph stops
+        pauseDate = new Date(updatedRange);
+
+
+        // define the line
+        var valueline = d3.line()
+            .x(function (d) {
+                if (d.date < pauseDate) {
+                    return x(d.date);
+                }
+
+            })
+            .y(function (d) {
+                if (d.date < pauseDate) {
+                    return y(d.close);
+                }
+
+            });
+
+        // append the svg obgect to the body of the page
+        // appends a 'group' element to 'svg'
+        // moves the 'group' element to the top left margin
+        var svg = d3.select("#chart").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
+
+        // Get the data
+        d3.csv("CME.csv", function (error, data) {
+            if (error) throw error;
+
+            count = 500;
+            i = 1;
+            // format the data
+            data.forEach(function (d) {
+
+                d.date = parseTime(d.date);
+                d.close = +d.close;
+
+            });
+
+            // Scale the range of the data
+            x.domain(d3.extent(data, function (d) {
+                return d.date;
+            }));
+            y.domain([0, d3.max(data, function (d) {
+                return d.close;
+            })]);
+
+            // Add the valueline path.
+            svg.append("path")
+                .data([data])
+                .attr("class", "line")
+                .attr("d", valueline);
+
+            // Add the X Axis
+            svg.append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x)
+                    .tickFormat(d3.timeFormat("%Y")))
+                .selectAll("text")
+                .style("text-anchor", "end")
+                // .attr("dx", "-.8em")
+                // .attr("dy", ".15em")
+                // .attr("transform", "rotate(-65)");
+
+            // text label for the x axis
+            svg.append("text")
+                .attr("transform",
+                    "translate(" + (width/2) + " ," +
+                    (height + margin.top + 20) + ")")
+                .style("text-anchor", "middle")
+                .text("Date");
+
+            // text label for the y axis
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0 - margin.left)
+                .attr("x",0 - (height / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text("Stock Value");
+
+            // Add the Y Axis
+            svg.append("g")
+                .attr("class", "axis")
+                .call(d3.axisLeft(y));
+
+            var focus = svg.append("g")
+                .attr("class", "focus")
+                .style("display", "none");
+
+            focus.append("circle")
+                .attr("r", 5);
+
+            focus.append("rect")
+                .attr("class", "tooltip2")
+                .attr("width", 100)
+                .attr("height", 50)
+                .attr("x", 10)
+                .attr("y", -22)
+                .attr("rx", 4)
+                .attr("ry", 4);
+
+            focus.append("text")
+                .attr("class", "tooltip-date")
+                .attr("x", 18)
+                .attr("y", -2);
+
+            focus.append("text")
+                .attr("x", 18)
+                .attr("y", -2);
+            //.attr("y", 18);
+            //.text("Likes:");
+
+            focus.append("text")
+                .attr("class", "tooltip-likes")
+                .attr("x", 18)
+                .attr("y", 15);
+
+            svg.append("rect")
+                .attr("class", "overlay")
+                .attr("width", width)
+                .attr("height", height)
+                .on("mouseover", function () {
+                    focus.style("display", null);
+                })
+                .on("mouseout", function () {
+                    focus.style("display", "none");
+                })
+                .on("mousemove", mousemove);
+
+            const makeAnnotations = d3.annotation()
+                .editMode(true)
+                //also can set and override in the note.padding property
+                //of the annotation object
+                .notePadding(15)
+                .type(type)
+                //accessors & accessorsInverse not needed
+                //if using x, y in annotations JSON
+                .accessors({
+                    x: d => x(parseTime(d.date)),
+                    y: d => y(d.close.toFixed(2))
+                })
+                .accessorsInverse({
+                    date: d => timeFormat(x.invert(d.x)),
+                    close: d => y.invert(d.y)
+                })
+                .annotations(annotations);
+
+            d3.select("svg")
+                .append("g")
+                .attr("class", "annotation-group")
+                .call(makeAnnotations);
+
+
+            bisectDate = d3.bisector(function (d) {
+                if (d.date < pauseDate) {
+                    return d.date;
+                }
+            }).left;
+
+
+            function mousemove() {
+                var x0 = x.invert(d3.mouse(this)[0]),
+                    i = bisectDate(data, x0, 1),
+                    d0 = data[i - 1],
+                    d1 = data[i],
+                    d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+                focus.attr("transform", "translate(" + x(d.date) + "," + y(d.close) + ")");
+                focus.select(".tooltip-date").text(dateFormatter(d.date));
+                focus.select(".tooltip-likes").text(d.close.toFixed(2));
+            }
+
+
+        });
+    }
+</script>
+</body>
